@@ -1,0 +1,66 @@
+vaccine_coverage_cat,pathogen_cat,complication_cat,mean,p025,p975
+50% lower,Rubella,Congenital rubella syndrome,10667.3645,6669.8499999999995,14562.449999999997
+50% lower,All pathogens,Death,159180.924,151155.75,164747.55
+50% lower,All pathogens,Hospitalization,10261535.8225,9942090.675,10536619.3
+50% lower,Measles,Post-measles neurological sequelae,51193.7115,49640.925,52636.2
+50% lower,Polio,Paralytic polio,5415.404,0,26260.624999999953
+45% lower,Rubella,Congenital rubella syndrome,6737.244,3150.925,10064.025
+45% lower,All pathogens,Death,142401.20049999998,135913.275,148526.30000000002
+45% lower,All pathogens,Hospitalization,9297703.8445,8997882.85,9575433.875
+45% lower,Measles,Post-measles neurological sequelae,46438.889,44905.925,47811.05
+45% lower,Polio,Paralytic polio,4042.883,0,20870.374999999978
+40% lower,Rubella,Congenital rubella syndrome,2900.9765,571.9250000000001,5507.274999999998
+40% lower,All pathogens,Death,126323.48550000001,120865.7,132443.44999999998
+40% lower,All pathogens,Hospitalization,8346389.438,8051940.8,8617153.225
+40% lower,Measles,Post-measles neurological sequelae,41716.2795,40174.950000000004,43045.075
+40% lower,Polio,Paralytic polio,2958.0175,0,17346.324999999997
+35% lower,Rubella,Congenital rubella syndrome,315.703,2,1162.174999999999
+35% lower,All pathogens,Death,110755.619,106163,116171.97499999998
+35% lower,All pathogens,Hospitalization,7367518.9625,7088743.775,7631752
+35% lower,Measles,Post-measles neurological sequelae,36823.8465,35343.75,38189
+35% lower,Polio,Paralytic polio,1641.926,0,13906.25
+30% lower,Rubella,Congenital rubella syndrome,4.506,0,23
+30% lower,All pathogens,Death,95762.46,91627.825,100601.12499999999
+30% lower,All pathogens,Hospitalization,6379310.148499999,6108554.225,6634573.05
+30% lower,Measles,Post-measles neurological sequelae,31895.8095,30533.725000000002,33151.075000000004
+30% lower,Polio,Paralytic polio,790.1425,0,10341.399999999994
+25% lower,Rubella,Congenital rubella syndrome,0.8385,0,3
+25% lower,All pathogens,Death,80660.3715,76503.825,84312.625
+25% lower,All pathogens,Hospitalization,5375997.725,5106118.550000001,5614178.425000001
+25% lower,Measles,Post-measles neurological sequelae,26878.76,25455.925,28142.199999999997
+25% lower,Polio,Paralytic polio,100.707,0,1309.4749999999974
+20% lower,Rubella,Congenital rubella syndrome,0.5625,0,2
+20% lower,All pathogens,Death,65008.643000000004,61340.575,68591.45
+20% lower,All pathogens,Hospitalization,4333706.596,4086247.2,4569470.649999999
+20% lower,Measles,Post-measles neurological sequelae,21668.3495,20422.899999999998,22849.149999999998
+20% lower,Polio,Paralytic polio,1.698,0,6
+15% lower,Rubella,Congenital rubella syndrome,0.432,0,2
+15% lower,All pathogens,Death,49643.948,46437.200000000004,52858.4
+15% lower,All pathogens,Hospitalization,3309416.182,3091845.775,3521695.8249999997
+15% lower,Measles,Post-measles neurological sequelae,16552.357,15446.85,17604.025
+15% lower,Polio,Paralytic polio,0.032,0,1
+10% lower,Rubella,Congenital rubella syndrome,0.3835,0,2
+10% lower,All pathogens,Death,33409.9735,30373.925,36214.1
+10% lower,All pathogens,Hospitalization,2226946.9125,2025789.15,2413285.7
+10% lower,Measles,Post-measles neurological sequelae,11135.5355,10083.975,12120.099999999999
+10% lower,Polio,Paralytic polio,0.011,0,0
+5% lower,Rubella,Congenital rubella syndrome,0.3155,0,2
+5% lower,All pathogens,Death,17102.583499999997,14429.85,19543.025
+5% lower,All pathogens,Hospitalization,1140322.384,960322,1298026.4499999997
+5% lower,Measles,Post-measles neurological sequelae,5702.7085,4771,6527.049999999999
+5% lower,Polio,Paralytic polio,0.0085,0,0
+Current levels,Rubella,Congenital rubella syndrome,0.282,0,2
+Current levels,All pathogens,Death,2553.4550000000004,1135.9250000000002,3755.199999999999
+Current levels,All pathogens,Hospitalization,170227.49800000002,76225.375,250032.59999999998
+Current levels,Measles,Post-measles neurological sequelae,850.9915,371.97499999999997,1266.0499999999997
+Current levels,Polio,Paralytic polio,0.005,0,0
+5% higher,Rubella,Congenital rubella syndrome,0.2315,0,1
+5% higher,All pathogens,Death,18.4765,5,65
+5% higher,All pathogens,Hospitalization,1176.293,621,3915.1249999999995
+5% higher,Measles,Post-measles neurological sequelae,5.9115,1,21
+5% higher,Polio,Paralytic polio,0.003,0,0
+10% higher,Rubella,Congenital rubella syndrome,0.22,0,1
+10% higher,All pathogens,Death,8.979500000000002,3,19
+10% higher,All pathogens,Hospitalization,553.3615000000001,439,715.0249999999999
+10% higher,Measles,Post-measles neurological sequelae,2.6905,0,6.024999999999864
+10% higher,Polio,Paralytic polio,0.0025,0,0

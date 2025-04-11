@@ -1,0 +1,157 @@
+result_cat,pathogen_cat,vaccine_coverage_cat,state,mean,p025,p975
+Primary result,Measles,50% lower,US,51190797.833,49717133.875,52538506.65
+"Population-weighted
+importation",Measles,50% lower,US,50481757.739,48858073,51998120.900000006
+Primary result,Measles,45% lower,US,46437260.7696,44986719.349999994,47771770.425000004
+"Population-weighted
+importation",Measles,45% lower,US,45773297.7872,44016055.625,47336912.25
+Primary result,Measles,40% lower,US,41718342.3321,40253641.075,42988428.85
+"Population-weighted
+importation",Measles,40% lower,US,41177663.4312,39607175.1,42723814.1
+Primary result,Measles,35% lower,US,36830035.3542,35442133.225,38083309.9
+"Population-weighted
+importation",Measles,35% lower,US,36340109.6298,34654349.225,37701374.05
+Primary result,Measles,30% lower,US,31893254.7727,30559613.6,33129307.849999998
+"Population-weighted
+importation",Measles,30% lower,US,31431820.3358,29864573.724999998,32842531.4
+Primary result,Measles,25% lower,US,26881295.157899998,25526132.349999998,28061288.424999997
+"Population-weighted
+importation",Measles,25% lower,US,26509348.1508,25070430.099999998,27902371.049999997
+Primary result,Measles,20% lower,US,21668888.945,20432469.85,22841454.849999998
+"Population-weighted
+importation",Measles,20% lower,US,21359503.6762,20020316.299999997,22706055.7
+Primary result,Measles,15% lower,US,16546454.0222,15453747.725000001,17616191.900000002
+"Population-weighted
+importation",Measles,15% lower,US,16315500.175,15070463.45,17445925.7
+Primary result,Measles,10% lower,US,11133969.8736,10130975.925,12059553.45
+"Population-weighted
+importation",Measles,10% lower,US,10999751.5714,9978831.75,11999097.65
+Primary result,Measles,5% lower,US,5702114.2378,4803139.100000001,6493437.675
+"Population-weighted
+importation",Measles,5% lower,US,5596026.1424,4697237.175,6402831.7
+Primary result,Measles,Current levels,US,851327.2448,381319.9,1250911.7999999998
+"Population-weighted
+importation",Measles,Current levels,US,829508.2180000002,349449.22500000003,1234929.375
+Primary result,Measles,5% higher,US,5792.612700000001,3124.9500000000003,19383.674999999992
+"Population-weighted
+importation",Measles,5% higher,US,6126.0812,3169.9,19003.274999999998
+Primary result,Measles,10% higher,US,2716.3717,2227.9500000000003,3435.0499999999993
+"Population-weighted
+importation",Measles,10% higher,US,2745.7576,2239.9,3521.4499999999994
+Primary result,Rubella,50% lower,US,9945099.5163,6430585.675,13016420.424999997
+"Population-weighted
+importation",Rubella,50% lower,US,8100735.545400001,4197497.899999999,11305312.05
+Primary result,Rubella,45% lower,US,6170911.803900001,3042169.8000000003,8998699.024999999
+"Population-weighted
+importation",Rubella,45% lower,US,4605104.532599999,1449617.2750000001,7624905.2
+Primary result,Rubella,40% lower,US,2633077.8693999997,527485.375,4936014.799999999
+"Population-weighted
+importation",Rubella,40% lower,US,1878267.0316,168285.825,4043472.399999999
+Primary result,Rubella,35% lower,US,292532.53259999986,2546.7250000000004,1055609.9249999993
+"Population-weighted
+importation",Rubella,35% lower,US,196672.8029999999,871.9499999999999,877628.7249999999
+Primary result,Rubella,30% lower,US,4348.3753,664,20548.924999999945
+"Population-weighted
+importation",Rubella,30% lower,US,2997.7888,451.97499999999997,17708.399999999994
+Primary result,Rubella,25% lower,US,789.8489999999999,428.975,1663.199999999999
+"Population-weighted
+importation",Rubella,25% lower,US,636.8606000000001,365,1469.2499999999995
+Primary result,Rubella,20% lower,US,477.55449999999996,337.97499999999997,715.0249999999999
+"Population-weighted
+importation",Rubella,20% lower,US,409.9034,298.975,616.05
+Primary result,Rubella,15% lower,US,352.6515,270,464.02499999999986
+"Population-weighted
+importation",Rubella,15% lower,US,320.161,250,425.025
+Primary result,Rubella,10% lower,US,280.2939,223,351.02499999999986
+"Population-weighted
+importation",Rubella,10% lower,US,264.8914,210.97500000000002,327.025
+Primary result,Rubella,5% lower,US,229.5815,184.975,282
+"Population-weighted
+importation",Rubella,5% lower,US,221.9656,181.97500000000002,269.025
+Primary result,Rubella,Current levels,US,190.106,154,230
+"Population-weighted
+importation",Rubella,Current levels,US,188.7546,155,227
+Primary result,Rubella,5% higher,US,160.47449999999998,130,193.02499999999986
+"Population-weighted
+importation",Rubella,5% higher,US,161.338,131,193.02499999999998
+Primary result,Rubella,10% higher,US,140.945,113,170
+"Population-weighted
+importation",Rubella,10% higher,US,140.6,114.97500000000001,169.02499999999998
+Primary result,Diphtheria,50% lower,US,196.52570000000014,1,1026.8999999999842
+"Population-weighted
+importation",Diphtheria,50% lower,US,3801.695199999986,1,75857.2749999996
+Primary result,Diphtheria,45% lower,US,38.609999999999935,1,409.0749999999996
+"Population-weighted
+importation",Diphtheria,45% lower,US,69.74819999999922,1.9750000000000014,901.5249999999968
+Primary result,Diphtheria,40% lower,US,17.50409999999999,1,148.02499999999986
+"Population-weighted
+importation",Diphtheria,40% lower,US,17.291800000000006,1,123.34999999999968
+Primary result,Diphtheria,35% lower,US,12.941400000000002,1,84
+"Population-weighted
+importation",Diphtheria,35% lower,US,15.328600000000002,2,103.09999999999991
+Primary result,Diphtheria,30% lower,US,11.897900000000007,1,64.02499999999986
+"Population-weighted
+importation",Diphtheria,30% lower,US,12.685399999999996,2,70.02499999999998
+Primary result,Diphtheria,25% lower,US,11.1484,1,52
+"Population-weighted
+importation",Diphtheria,25% lower,US,11.006999999999996,1,50.02499999999998
+Primary result,Diphtheria,20% lower,US,9.943500000000006,1,38
+"Population-weighted
+importation",Diphtheria,20% lower,US,9.918399999999998,1,38.02499999999998
+Primary result,Diphtheria,15% lower,US,9.638999999999998,1,33.024999999999864
+"Population-weighted
+importation",Diphtheria,15% lower,US,9.694799999999999,1,32.049999999999955
+Primary result,Diphtheria,10% lower,US,8.964399999999996,1,28
+"Population-weighted
+importation",Diphtheria,10% lower,US,8.785799999999998,1,29
+Primary result,Diphtheria,5% lower,US,8.609,1,25
+"Population-weighted
+importation",Diphtheria,5% lower,US,8.870000000000001,1,29
+Primary result,Diphtheria,Current levels,US,8.285000000000002,1,22
+"Population-weighted
+importation",Diphtheria,Current levels,US,8.627399999999998,1,28
+Primary result,Diphtheria,5% higher,US,8.036999999999999,1,22
+"Population-weighted
+importation",Diphtheria,5% higher,US,8.065999999999999,1.9750000000000014,22
+Primary result,Diphtheria,10% higher,US,7.895999999999999,1,21.024999999999864
+"Population-weighted
+importation",Diphtheria,10% higher,US,7.891,1,21
+Primary result,Polio,50% lower,US,4332220.038999998,4,21497369.34999998
+"Population-weighted
+importation",Polio,50% lower,US,4065066.5392,4,19798158.199999996
+Primary result,Polio,45% lower,US,3477540.707400001,4,18446912.97499999
+"Population-weighted
+importation",Polio,45% lower,US,3339692.301199999,3,19278920.45
+Primary result,Polio,40% lower,US,2758727.352599997,4,16787760.474999994
+"Population-weighted
+importation",Polio,40% lower,US,2642247.1302000014,4,16565133.65
+Primary result,Polio,35% lower,US,1677126.2984000007,4,14880807.849999998
+"Population-weighted
+importation",Polio,35% lower,US,1919872.4617999988,3.9750000000000014,15548782.674999999
+Primary result,Polio,30% lower,US,878245.5951999999,4,12290026.324999996
+"Population-weighted
+importation",Polio,30% lower,US,1177408.244,4,14067467.724999998
+Primary result,Polio,25% lower,US,87577.59039999994,3,1700736.949999998
+"Population-weighted
+importation",Polio,25% lower,US,117478.65280000016,4,1934545.7249999975
+Primary result,Polio,20% lower,US,416.8994999999992,3,8886.749999999964
+"Population-weighted
+importation",Polio,20% lower,US,330.00239999999945,4,6021.699999999996
+Primary result,Polio,15% lower,US,41.369099999999996,4,304.02499999999986
+"Population-weighted
+importation",Polio,15% lower,US,50.824200000000005,4,329.14999999999986
+Primary result,Polio,10% lower,US,27.400599999999997,3,119.02499999999986
+"Population-weighted
+importation",Polio,10% lower,US,33.05359999999999,3.9750000000000014,157.02499999999998
+Primary result,Polio,5% lower,US,21.274,4,78
+"Population-weighted
+importation",Polio,5% lower,US,29.418799999999997,4,107.04999999999995
+Primary result,Polio,Current levels,US,18.265000000000008,3,61.024999999999864
+"Population-weighted
+importation",Polio,Current levels,US,24.952,3,84.04999999999995
+Primary result,Polio,5% higher,US,15.841399999999997,3,49
+"Population-weighted
+importation",Polio,5% higher,US,21.795399999999997,3.9750000000000014,67.02499999999998
+Primary result,Polio,10% higher,US,15.546500000000004,3,49
+"Population-weighted
+importation",Polio,10% higher,US,20.197999999999997,3,57.02499999999998

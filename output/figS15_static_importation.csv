@@ -1,0 +1,157 @@
+result_cat,pathogen_cat,vaccine_coverage_cat,state,mean,p025,p975
+Primary result,Measles,50% lower,US,51190797.833,49717133.875,52538506.65
+"Static
+importation",Measles,50% lower,US,50003941.3656,48050630.875,51624881.449999996
+Primary result,Measles,45% lower,US,46437260.7696,44986719.349999994,47771770.425000004
+"Static
+importation",Measles,45% lower,US,45350896.7316,43569470.55,46889274.349999994
+Primary result,Measles,40% lower,US,41718342.3321,40253641.075,42988428.85
+"Static
+importation",Measles,40% lower,US,40638244.8098,38973834.025,42127824.75
+Primary result,Measles,35% lower,US,36830035.3542,35442133.225,38083309.9
+"Static
+importation",Measles,35% lower,US,35911528.4044,34392118.625,37501877.1
+Primary result,Measles,30% lower,US,31893254.7727,30559613.6,33129307.849999998
+"Static
+importation",Measles,30% lower,US,31013706.6882,29414977.125,32637749.775000002
+Primary result,Measles,25% lower,US,26881295.157899998,25526132.349999998,28061288.424999997
+"Static
+importation",Measles,25% lower,US,26089246.0812,24506352,27486244.900000002
+Primary result,Measles,20% lower,US,21668888.945,20432469.85,22841454.849999998
+"Static
+importation",Measles,20% lower,US,20965103.8892,19538849.150000002,22176448.749999996
+Primary result,Measles,15% lower,US,16546454.0222,15453747.725000001,17616191.900000002
+"Static
+importation",Measles,15% lower,US,15929455.1572,14522763.475000001,17125184.95
+Primary result,Measles,10% lower,US,11133969.8736,10130975.925,12059553.45
+"Static
+importation",Measles,10% lower,US,10619927.9182,9424397.95,11702850.975
+Primary result,Measles,5% lower,US,5702114.2378,4803139.100000001,6493437.675
+"Static
+importation",Measles,5% lower,US,5358144.392,4405977.600000001,6220320.649999999
+Primary result,Measles,Current levels,US,851327.2448,381319.9,1250911.7999999998
+"Static
+importation",Measles,Current levels,US,770222.331,248314.25,1183547.625
+Primary result,Measles,5% higher,US,5792.612700000001,3124.9500000000003,19383.674999999992
+"Static
+importation",Measles,5% higher,US,5616.814800000001,3038.7999999999997,18747.875
+Primary result,Measles,10% higher,US,2716.3717,2227.9500000000003,3435.0499999999993
+"Static
+importation",Measles,10% higher,US,2839.6283999999996,2330.85,3595.4749999999995
+Primary result,Rubella,50% lower,US,9945099.5163,6430585.675,13016420.424999997
+"Static
+importation",Rubella,50% lower,US,4479337.024600001,1066084.35,8282863.899999999
+Primary result,Rubella,45% lower,US,6170911.803900001,3042169.8000000003,8998699.024999999
+"Static
+importation",Rubella,45% lower,US,2684956.8736000005,221067.125,5796937.075
+Primary result,Rubella,40% lower,US,2633077.8693999997,527485.375,4936014.799999999
+"Static
+importation",Rubella,40% lower,US,1023323.8913999998,878.825,2989319.1
+Primary result,Rubella,35% lower,US,292532.53259999986,2546.7250000000004,1055609.9249999993
+"Static
+importation",Rubella,35% lower,US,110416.93639999993,281,737488.5499999997
+Primary result,Rubella,30% lower,US,4348.3753,664,20548.924999999945
+"Static
+importation",Rubella,30% lower,US,1602.0275999999985,219.975,12240.39999999998
+Primary result,Rubella,25% lower,US,789.8489999999999,428.975,1663.199999999999
+"Static
+importation",Rubella,25% lower,US,369.3412000000001,189.97500000000002,962.7249999999993
+Primary result,Rubella,20% lower,US,477.55449999999996,337.97499999999997,715.0249999999999
+"Static
+importation",Rubella,20% lower,US,253.593,169,416
+Primary result,Rubella,15% lower,US,352.6515,270,464.02499999999986
+"Static
+importation",Rubella,15% lower,US,215.1816,157.97500000000002,295.025
+Primary result,Rubella,10% lower,US,280.2939,223,351.02499999999986
+"Static
+importation",Rubella,10% lower,US,190.6866,145,242.04999999999995
+Primary result,Rubella,5% lower,US,229.5815,184.975,282
+"Static
+importation",Rubella,5% lower,US,173.837,136.975,219
+Primary result,Rubella,Current levels,US,190.106,154,230
+"Static
+importation",Rubella,Current levels,US,161.4766,130.97500000000002,199
+Primary result,Rubella,5% higher,US,160.47449999999998,130,193.02499999999986
+"Static
+importation",Rubella,5% higher,US,153.763,125.975,189
+Primary result,Rubella,10% higher,US,140.945,113,170
+"Static
+importation",Rubella,10% higher,US,147.485,118,179.02499999999998
+Primary result,Diphtheria,50% lower,US,196.52570000000014,1,1026.8999999999842
+"Static
+importation",Diphtheria,50% lower,US,5024.958000000008,1,118559.44999999985
+Primary result,Diphtheria,45% lower,US,38.609999999999935,1,409.0749999999996
+"Static
+importation",Diphtheria,45% lower,US,25.224799999999956,1,270.0999999999999
+Primary result,Diphtheria,40% lower,US,17.50409999999999,1,148.02499999999986
+"Static
+importation",Diphtheria,40% lower,US,17.856399999999987,1,131.04999999999995
+Primary result,Diphtheria,35% lower,US,12.941400000000002,1,84
+"Static
+importation",Diphtheria,35% lower,US,13.202599999999999,1,68.19999999999982
+Primary result,Diphtheria,30% lower,US,11.897900000000007,1,64.02499999999986
+"Static
+importation",Diphtheria,30% lower,US,12.844999999999994,1,78
+Primary result,Diphtheria,25% lower,US,11.1484,1,52
+"Static
+importation",Diphtheria,25% lower,US,10.627599999999997,1,48.02499999999998
+Primary result,Diphtheria,20% lower,US,9.943500000000006,1,38
+"Static
+importation",Diphtheria,20% lower,US,10.482999999999999,1,40
+Primary result,Diphtheria,15% lower,US,9.638999999999998,1,33.024999999999864
+"Static
+importation",Diphtheria,15% lower,US,9.787999999999998,1,34.02499999999998
+Primary result,Diphtheria,10% lower,US,8.964399999999996,1,28
+"Static
+importation",Diphtheria,10% lower,US,8.842,1,27.024999999999977
+Primary result,Diphtheria,5% lower,US,8.609,1,25
+"Static
+importation",Diphtheria,5% lower,US,8.474,1,27
+Primary result,Diphtheria,Current levels,US,8.285000000000002,1,22
+"Static
+importation",Diphtheria,Current levels,US,8.445399999999998,1,24
+Primary result,Diphtheria,5% higher,US,8.036999999999999,1,22
+"Static
+importation",Diphtheria,5% higher,US,8.095999999999997,1,24.024999999999977
+Primary result,Diphtheria,10% higher,US,7.895999999999999,1,21.024999999999864
+"Static
+importation",Diphtheria,10% higher,US,7.579000000000001,1,22
+Primary result,Polio,50% lower,US,4332220.038999998,4,21497369.34999998
+"Static
+importation",Polio,50% lower,US,2590891.7869999995,2,17416064.649999995
+Primary result,Polio,45% lower,US,3477540.707400001,4,18446912.97499999
+"Static
+importation",Polio,45% lower,US,2159671.852000001,1,14890434.424999999
+Primary result,Polio,40% lower,US,2758727.352599997,4,16787760.474999994
+"Static
+importation",Polio,40% lower,US,1753965.8352000006,1,15308730.349999998
+Primary result,Polio,35% lower,US,1677126.2984000007,4,14880807.849999998
+"Static
+importation",Polio,35% lower,US,1283465.1816000012,2,13874826.549999999
+Primary result,Polio,30% lower,US,878245.5951999999,4,12290026.324999996
+"Static
+importation",Polio,30% lower,US,606839.8349999998,2,6877967.324999998
+Primary result,Polio,25% lower,US,87577.59039999994,3,1700736.949999998
+"Static
+importation",Polio,25% lower,US,47086.65179999993,1,1105451.299999999
+Primary result,Polio,20% lower,US,416.8994999999992,3,8886.749999999964
+"Static
+importation",Polio,20% lower,US,100.81900000000012,2,972.649999999993
+Primary result,Polio,15% lower,US,41.369099999999996,4,304.02499999999986
+"Static
+importation",Polio,15% lower,US,26.571999999999946,2,221.02499999999998
+Primary result,Polio,10% lower,US,27.400599999999997,3,119.02499999999986
+"Static
+importation",Polio,10% lower,US,16.975,1,96
+Primary result,Polio,5% lower,US,21.274,4,78
+"Static
+importation",Polio,5% lower,US,14.452399999999997,1,66
+Primary result,Polio,Current levels,US,18.265000000000008,3,61.024999999999864
+"Static
+importation",Polio,Current levels,US,12.834999999999996,1,50
+Primary result,Polio,5% higher,US,15.841399999999997,3,49
+"Static
+importation",Polio,5% higher,US,10.934800000000003,1,38.02499999999998
+Primary result,Polio,10% higher,US,15.546500000000004,3,49
+"Static
+importation",Polio,10% higher,US,11.386000000000001,2,40
