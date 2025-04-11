@@ -1,0 +1,231 @@
+---
+title: "Cumulative infections over 25 years"
+author: "Mathew Kiang"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+# Static tables 
+
+```{r data, results='hide'}
+## Imports ----
+library(tidyverse)
+library(duckdb)
+library(here)
+library(kableExtra)
+library(knitr)
+source(here("code", "utils.R"))
+
+## Helper function ----
+prettyround <- function(x, accuracy_x = 0.1) {
+    scales::label_number(
+        accuracy = accuracy_x,
+        scale_cut = scales::cut_short_scale()
+    )(x)
+}
+
+## Data ----
+us_final <- pull_summary_data(
+    state_x = "US",
+    vaccine_x = c(1, .9, 1.05, .5, .75),
+    time_max = 365 * 25
+) |>
+    filter(
+        time == 365 * 25 - 1,
+        metric == "cume_new_infectious"
+    ) |>
+    mutate(mean = winsorized_mean) |>
+    select(-starts_with("winsorized"))
+```
+
+
+## Cumulative cases across all outcomes (**rounded**)
+
+Cumulative number of cases at 25 years, by pathogen and vaccine coverage. 
+
+```{r}
+us_final |>
+    rowwise() |>
+    transmute(
+        pathogen_cat,
+        vaccine_coverage_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyround(mean),
+            prettyround(p025),
+            prettyround(p975)
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyround(median),
+            prettyround(p250),
+            prettyround(p750)
+        )
+    ) |>
+    arrange(pathogen_cat, desc(vaccine_coverage_cat)) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE)
+```
+
+## Additional cases compared to current levels (**rounded**; 50% vaccine scenario)
+
+How many **more** cases would happen after 25 years, compared to the expected number of cases (under current vaccine coverage)?
+
+```{r}
+## Constants ----
+TARGET_VACCINE <- .5
+us_final |>
+    filter(vaccine_coverage %in% c(1, TARGET_VACCINE)) |>
+    select(pathogen_cat, vaccine_coverage, mean:p975) |>
+    pivot_wider(values_from = mean:p975, names_from = vaccine_coverage) |>
+    transmute(
+        pathogen_cat,
+        additional_cases_mean95 =
+            sprintf(
+                "%s (95%% UI: %s-%s)",
+                prettyround(`mean_0.5` - mean_1),
+                prettyround(`p025_0.5` - p025_1),
+                prettyround(`p975_0.5` - p975_1)
+            ),
+        additional_cases_medianiqr =
+            sprintf(
+                "%s (IQR: %s-%s)",
+                prettyround(`median_0.5` - median_1),
+                prettyround(`p250_0.5` - p250_1),
+                prettyround(`p750_0.5` - p750_1)
+            )
+    ) |>
+    arrange(pathogen_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE)
+```
+
+
+## Cumulative cases across all outcomes (**exact**)
+```{r}
+us_final |>
+    transmute(
+        pathogen_cat,
+        vaccine_coverage_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyNum(round(mean), big.mark = ","),
+            prettyNum(round(p025), big.mark = ","),
+            prettyNum(round(p975), big.mark = ",")
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyNum(round(median), big.mark = ","),
+            prettyNum(round(p250), big.mark = ","),
+            prettyNum(round(p750), big.mark = ",")
+        )
+    ) |>
+    arrange(pathogen_cat, desc(vaccine_coverage_cat)) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE)
+```
+
+## Additional cases compared to current levels (**exact**; 50% vaccine scenario)
+
+```{r}
+## Constants ----
+TARGET_VACCINE <- .5
+us_final |>
+    filter(vaccine_coverage %in% c(1, TARGET_VACCINE)) |>
+    select(pathogen_cat, vaccine_coverage, mean:p975) |>
+    pivot_wider(values_from = mean:p975, names_from = vaccine_coverage) |>
+    transmute(
+        pathogen_cat,
+        additional_cases_mean95 =
+            sprintf(
+                "%s (95%% UI: %s-%s)",
+                prettyNum(round(`mean_0.5` - mean_1), big.mark = ","),
+                prettyNum(round(`p025_0.5` - p025_1), big.mark = ","),
+                prettyNum(round(`p975_0.5` - p975_1), big.mark = ",")
+            ),
+        additional_cases_medianiqr =
+            sprintf(
+                "%s (IQR: %s-%s)",
+                prettyNum(round(`median_0.5` - median_1), big.mark = ","),
+                prettyNum(round(`p250_0.5` - p250_1), big.mark = ","),
+                prettyNum(round(`p750_0.5` - p750_1), big.mark = ",")
+            )
+    ) |>
+    arrange(pathogen_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE)
+```
+
+# Interactive table, full results
+
+```{r data2, results='hide'}
+## Imports ----
+library(DT)
+
+## Data ----
+us_final <- pull_summary_data(
+    state_x = "US",
+    time_max = 365 * 30
+) |>
+    filter(
+        time == 365 * 25 - 1,
+        metric == "cume_new_infectious"
+    ) |>
+    mutate(mean = winsorized_mean) |>
+    select(-starts_with("winsorized"))
+```
+
+
+```{r}
+us_final |>
+    rowwise() |>
+    transmute(
+        pathogen_cat,
+        vaccine_coverage_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyround(mean),
+            prettyround(p025),
+            prettyround(p975)
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyround(median),
+            prettyround(p250),
+            prettyround(p750)
+        )
+    ) |>
+    arrange(pathogen_cat, desc(vaccine_coverage_cat)) |>
+    DT::datatable(
+                colnames = c(
+                    "Pathogen",
+                    "Vaccine scenario",
+                    "Mean (95% UI)",
+                    "Median (IQR)"
+                ),
+                rownames = FALSE,
+                filter = list(
+                    position = 'top'
+                ),
+                options = list(
+                    columnDefs = list(list(targets = c(2, 3), 
+                                           searchable = FALSE)),
+                    paging = TRUE,
+                               searching = TRUE,
+                               pageLength = 100,
+                searchCols = list(
+                    NULL, 
+                                  list(search = '["5% higher","Current levels","10% lower","20% lower","50% lower"]'))))
+```
+

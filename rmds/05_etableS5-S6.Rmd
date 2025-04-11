@@ -1,0 +1,68 @@
+---
+title: "Demography: State-specific birth rates and state- and age-specific death rates"
+author: "Mathew Kiang"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+```{r data, results='hide'}
+## Imports ----
+library(tidyverse)
+library(duckdb)
+library(here)
+library(kableExtra)
+library(knitr)
+source(here("code", "utils.R"))
+```
+
+# eTable S6. State-specific demography
+
+
+```{r}
+birth_rate <- map_dfr(.x = c("DC", state.abb),
+    .f = ~ {
+        tibble(
+            state = .x,
+            birth_rate = sprintf("%0.1f", 
+                                 round(1000 * return_birth_rate(state_abbrev = .x), 1))
+        )
+    }) |> 
+    arrange(state)
+```
+
+```{r}
+death_rate <- map_dfr(.x = c("DC", state.abb),
+    .f = ~ {
+        tibble(
+            state = .x,
+            age = seq(0, 85, 5),
+            rate = return_death_rate(
+                state_abbrev = .x
+            )
+        )
+    }) |> 
+    arrange(state, age) |>
+    mutate(label = sprintf("%0.1f", round(rate * 100000, 1))) |> 
+    select(-rate) |> 
+    pivot_wider(values_from = "label", names_from = "age")
+```
+
+```{r}
+left_join(
+    birth_rate,
+    death_rate, 
+) |> 
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE)
+```

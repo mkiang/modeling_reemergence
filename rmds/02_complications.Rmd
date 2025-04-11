@@ -1,0 +1,327 @@
+---
+title: "Infection-related complications"
+author: "Mathew Kiang"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+```{r data, results='hide'}
+## Imports ----
+library(tidyverse)
+library(here)
+library(knitr)
+library(kableExtra)
+library(DT)
+source(here("code", "utils.R"))
+
+prettyround <- function(x, accuracy_x = 0.1) {
+    scales::label_number(accuracy = accuracy_x,
+                         scale_cut = scales::cut_short_scale())(x)
+}
+
+## Data ----
+complications_df <- readRDS(here("data", "complications_df.RDS")) |>
+    group_by(pathogen, vaccine_coverage) |>
+    filter(time == max(time),
+           !grepl("\\_lower|\\_upper", complication)) |>
+    ungroup()
+
+deaths_df <- complications_df |>
+    filter(complication %in% c("cume_death", "cume_hospitalization")) |>
+    mutate(pathogen = "all_pathogens", 
+           time = 9125) |>
+    group_by(vaccine_coverage, pathogen, complication, time) |>
+    summarize(mean = sum(mean),
+              p025 = sum(p025),
+              p975 = sum(p975))
+
+complications_df <- complications_df |>
+    bind_rows(deaths_df) |>
+    categorize_pathogens() |>
+    categorize_complications() |>
+    categorize_vaccine_coverage() |>
+    arrange(complication_cat, pathogen_cat, desc(vaccine_coverage_cat))
+```
+
+# Static tables
+
+## Cumulative number of complications at 25 years (**rounded**)
+```{r}
+complications_df |>
+    filter(grepl("cume_", complication, fixed = TRUE),
+           vaccine_coverage %in% c(1, .9, 1.05, .5, .75),
+           complication != "cume_hearing_loss") |>
+    rowwise() |> 
+    transmute(
+        vaccine_coverage_cat,
+        pathogen_cat,
+        complication_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyround(mean),
+            prettyround(p025),
+            prettyround(p975)
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyround(median),
+            prettyround(p250),
+            prettyround(p750)
+        )
+    ) |> 
+    arrange(pathogen_cat, complication_cat, vaccine_coverage_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE) 
+```
+
+## Additional complications compared to current levels (**rounded**; 50% vaccine scenario)
+
+```{r}
+## Constants ----
+TARGET_VACCINE <- 0.5
+complications_df |>
+     filter(grepl("cume_", complication, fixed = TRUE),
+           complication != "cume_hearing_loss") |>
+    filter(vaccine_coverage %in% c(1, TARGET_VACCINE)) |>
+    select(pathogen_cat,
+           complication_cat,
+           vaccine_coverage,
+           mean:p975) |>
+    pivot_wider(values_from = mean:p975, names_from = vaccine_coverage) |>
+    rowwise() |> 
+    transmute(
+        pathogen_cat,
+        complication_cat,
+        additional_cases_mean95 =
+            sprintf(
+                "%s (95%% UI: %s-%s)",
+                prettyround(`mean_0.5` - mean_1),
+                prettyround(`p025_0.5` - p025_1),
+                prettyround(`p975_0.5` - p975_1)
+            ),
+        additional_cases_medianiqr =
+            sprintf(
+                "%s (IQR: %s-%s)",
+                prettyround(`median_0.5` - median_1),
+                prettyround(`p250_0.5` - p250_1),
+                prettyround(`p750_0.5` - p750_1)
+            )
+    ) |>
+    arrange(pathogen_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE) 
+```
+
+## Cumulative number of complications at 25 years (**exact**)
+```{r}
+complications_df |>
+     filter(grepl("cume_", complication, fixed = TRUE),
+           vaccine_coverage %in% c(1, .9, 1.05, .5, .25),
+           complication != "cume_hearing_loss") |> 
+    transmute(
+        vaccine_coverage_cat,
+        pathogen_cat,
+        complication_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyNum(round(mean), big.mark = ","),
+            prettyNum(round(p025), big.mark = ","),
+            prettyNum(round(p975), big.mark = ",")
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyNum(round(median), big.mark = ","),
+            prettyNum(round(p250), big.mark = ","),
+            prettyNum(round(p750), big.mark = ",")
+        )
+    ) |>
+    arrange(pathogen_cat, complication_cat, vaccine_coverage_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE) 
+```
+## Additional complications compared to current levels (**exact**; 50% vaccine scenario)
+
+```{r}
+## Constants ----
+TARGET_VACCINE <- 0.5
+complications_df |>
+     filter(grepl("cume_", complication, fixed = TRUE),
+           vaccine_coverage %in% c(1, .9, 1.05, .5, .25),
+           complication != "cume_hearing_loss") |>
+    filter(vaccine_coverage %in% c(1, TARGET_VACCINE)) |>
+    select(pathogen_cat,
+           complication_cat,
+           vaccine_coverage,
+           mean:p975) |>
+    pivot_wider(values_from = mean:p975, names_from = vaccine_coverage) |>
+    transmute(
+        pathogen_cat,
+        complication_cat,
+        additional_cases_mean95 =
+            sprintf(
+                "%s (95%% UI: %s-%s)",
+                prettyNum(round(`mean_0.5` - mean_1), big.mark = ","),
+                prettyNum(round(`p025_0.5` - p025_1), big.mark = ","),
+                prettyNum(round(`p975_0.5` - p975_1), big.mark = ",")
+            ),
+        additional_cases_medianiqr =
+            sprintf(
+                "%s (IQR: %s-%s)",
+                prettyNum(round(`median_0.5` - median_1), big.mark = ","),
+                prettyNum(round(`p250_0.5` - p250_1), big.mark = ","),
+                prettyNum(round(`p750_0.5` - p750_1), big.mark = ",")
+            )
+    ) |>
+    arrange(pathogen_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE) 
+```
+
+# Interactive table, full results
+
+```{r}
+complications_df |>
+     filter(grepl("cume_", complication, fixed = TRUE),
+           complication != "cume_hearing_loss") |> 
+  transmute(
+        pathogen_cat,
+        complication_cat,
+        vaccine_coverage_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyNum(round(mean), big.mark = ","),
+            prettyNum(round(p025), big.mark = ","),
+            prettyNum(round(p975), big.mark = ",")
+            # prettyround(mean),
+            # prettyround(p025),
+            # prettyround(p975)
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyNum(round(median), big.mark = ","),
+            prettyNum(round(p250), big.mark = ","),
+            prettyNum(round(p750), big.mark = ",")
+        )
+    ) |>
+    arrange(complication_cat, pathogen_cat, desc(vaccine_coverage_cat)) |>
+    DT::datatable(
+                colnames = c(
+                    "Pathogen",
+                    "Complication", 
+                    "Vaccine scenario",
+                    "Mean (95% UI)",
+                    "Median (IQR)"
+                ),
+                rownames = FALSE,
+                filter = list(
+                    position = 'top'
+                ),
+                options = list(
+                    columnDefs = list(list(targets = c(3, 4), 
+                                           searchable = FALSE)),
+                    paging = TRUE,
+                               searching = TRUE,
+                               pageLength = 100,
+                searchCols = list(
+                    NULL, NULL, 
+                                  list(search = '["5% higher","Current levels","10% lower","20% lower","50% lower"]'))))
+```
+
+# Complication bounds
+
+```{r}
+## Data ----
+complications_df <- readRDS(here::here("data", "complications_df.RDS")) |>
+    group_by(vaccine_coverage, pathogen, complication) |>
+    dplyr::filter(grepl("cume", complication), 
+                  vaccine_coverage >= .5, 
+                  time %in% c(365 * 25, 365 * 25 - 1),
+                  complication != "cume_hearing_loss",
+                  grepl("\\_lower|\\_upper|cume\\_death", complication)) |>
+    dplyr::select(-prob_gte1) |> 
+    slice_max(time) |> 
+    ungroup() |> 
+    arrange(vaccine_coverage, complication)
+
+## Assumes probability of hospitalizations or death are independent
+## across pathogens, which is how we model it.
+collapsed_df <- complications_df |>
+    select(-ends_with("cat"), -vaccine_coverage_cat_short, -sd, -median) |> 
+    dplyr::ungroup() |> 
+    mutate(complication = case_when(complication == "cume_death" ~ "cume_death_upper",
+                                    TRUE ~ complication)) |> 
+    dplyr::filter(grepl("cume\\_death\\_|cume\\_hospitalization\\_", complication)) |>
+    dplyr::mutate(pathogen = "all_pathogens",
+                  time = 365*25) |>
+    dplyr::group_by(vaccine_coverage, pathogen, complication, time) |>
+    dplyr::summarize(across(mean:p975, sum)) |>
+    dplyr::ungroup()
+
+combined_df <- complications_df |>
+    filter(complication != "cume_death") |> 
+    dplyr::bind_rows(collapsed_df) |>
+    categorize_complications() |>
+    categorize_pathogens() |>
+    categorize_vaccine_coverage() |>
+    arrange(vaccine_coverage, complication)
+```
+
+
+```{r}
+combined_df |>
+     filter(grepl("cume_", complication, fixed = TRUE),
+           complication != "cume_hearing_loss") |> 
+  transmute(
+        pathogen_cat,
+        complication_cat,
+        vaccine_coverage_cat,
+        estimate_mean95 = sprintf(
+            "%s (95%% UI: %s-%s)",
+            prettyNum(round(mean), big.mark = ","),
+            prettyNum(round(p025), big.mark = ","),
+            prettyNum(round(p975), big.mark = ",")
+            # prettyround(mean),
+            # prettyround(p025),
+            # prettyround(p975)
+        ),
+        estimate_medianiqr = sprintf(
+            "%s (IQR: %s-%s)",
+            prettyNum(round(median), big.mark = ","),
+            prettyNum(round(p250), big.mark = ","),
+            prettyNum(round(p750), big.mark = ",")
+        )
+    ) |>
+    arrange(complication_cat, pathogen_cat, desc(vaccine_coverage_cat)) |>
+    DT::datatable(
+                colnames = c(
+                    "Pathogen",
+                    "Complication", 
+                    "Vaccine scenario",
+                    "Mean (95% UI)",
+                    "Median (IQR)"
+                ),
+                rownames = FALSE,
+                filter = list(
+                    position = 'top'
+                ),
+                options = list(
+                    columnDefs = list(list(targets = c(3, 4), 
+                                           searchable = FALSE)),
+                    paging = TRUE,
+                               searching = TRUE,
+                               pageLength = 100,
+                searchCols = list(
+                    NULL, NULL, 
+                                  list(search = '["5% higher","Current levels","10% lower","20% lower","50% lower"]'))))
+```

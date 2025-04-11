@@ -1,0 +1,228 @@
+---
+title: "Comparison of raw NIS data to (modeled) CDC ChildVaxView"
+author: "Mathew Kiang"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+## Introduction
+
+The [CDC ChildVaxView](https://www.cdc.gov/vaccines/imz-managers/coverage/childvaxview/interactive-reports/index.html) tool provides state-level estimates of vaccination coverage among children under 3 years of age, by birth year. These rates are modeled using Kaplan-Meier survival analysis after aggregating multiple survey years by birth year of respondent. In our simulation, we also use the [National Immunization Survey (NIS)](https://www.cdc.gov/vaccines/imz-managers/coverage/nis/child/index.html) data; however, we use raw survey responses (after accounting for survey design). Here, we compare the vaccination coverage across the two sources.
+
+Note that the final year of CDC data (birth cohort 2021 or survey year 2024) is considered preliminary and is likely to change. 
+
+```{r data, results='hide'}
+library(tidyverse)
+library(here)
+library(geofacet)
+library(DT)
+
+vaccine_df <- readRDS(here("data", "vaccine_coverage.RDS"))
+cdc_raw <- read_csv(here("data_raw", "Vaccination_Coverage_among_Young_Children__0-35_Months__20250401.csv")) |>
+    janitor::clean_names()
+
+print_df <- left_join(
+    vaccine_df |>
+        transmute(
+            year,
+            abbrev,
+            vaccine,
+            nis_estimate = sprintf("%0.1f (%0.1f to %0.1f)",
+                round(estimate * 100, 1),
+                round(lower_ci * 100, 1),
+                round(upper_ci * 100, 1)
+            )
+        ),
+    cdc_raw |>
+        filter(geography %in% state.name,
+            vaccine %in% c("≥1 Dose MMR", "DTaP", "Polio"),
+            dimension_type == "Age",
+            dimension == "35 Months",
+            birth_year_birth_cohort %in% as.character(2001:2021)) |>
+        filter((vaccine == "DTaP" & dose == "≥4 Doses") |
+            (vaccine == "Polio" & dose == "≥3 Doses") |
+            (vaccine == "≥1 Dose MMR")) |>
+        left_join(
+            tibble(geography = state.name,
+                abbrev = state.abb)
+        ) |>
+        transmute(
+            abbrev,
+            year = as.numeric(birth_year_birth_cohort) - 2,
+            vaccine = case_when(
+                vaccine == "≥1 Dose MMR" ~ "mmr",
+                vaccine == "DTaP" ~ "tdap",
+                vaccine == "Polio" ~ "polio"
+            ),
+            cdc_estimate = sprintf("%0.1f (%s)", estimate_percent, x95_percent_ci_percent)
+        ) 
+) |>
+        arrange(vaccine, abbrev, year) 
+
+```
+
+```{r}
+plot_df <- bind_rows(
+    print_df |>
+        transmute(
+            year,
+            abbrev,
+            vaccine,
+            source = "Raw NIS data",
+            estimate = as.numeric(str_split_i(nis_estimate, " \\(", 1)),
+            lower = as.numeric(str_split_i(nis_estimate, " \\(| to ", 2)),
+            upper = as.numeric(str_split_i(nis_estimate, " to |\\)", 2))
+        ),
+    print_df |>
+        transmute(
+            year,
+            abbrev,
+            vaccine,
+            source = "CDCVaxView",
+            estimate = as.numeric(str_split_i(cdc_estimate, " \\(", 1)),
+            lower = as.numeric(str_split_i(cdc_estimate, " \\(| to ", 2)),
+            upper = as.numeric(str_split_i(cdc_estimate, " to |\\)", 2))
+        )
+)
+```
+
+## MMR
+
+```{r fig.height=12, fig.width=18}
+ggplot(plot_df |>
+    filter(vaccine == "mmr"),
+aes(x = year,
+    y = estimate,
+    ymin = lower,
+    ymax = upper,
+    color = source,
+    group = source, fill = source)) +
+    geom_ribbon(color = NA, alpha = .2) +
+    geom_line() + facet_geo(~abbrev) +
+    theme_bw() +
+    scale_fill_brewer("Data source", palette = "Set1") +
+    scale_color_brewer("Data source", palette = "Set1") +
+    scale_y_continuous("MMR vaccination rate at 35 months") +
+    scale_x_continuous(NULL)
+```
+
+```{r}
+print_df |>
+    filter(vaccine == "mmr") |>
+    select(-vaccine) |> 
+    DT::datatable(
+        colnames = c(
+            "Year",
+            "State",
+            "NIS Estimate",
+            "CDC Estimate"
+        ),
+        rownames = FALSE,
+        filter = list(
+            position = "top"
+        ),
+        options = list(
+            columnDefs = list(list(targets = c(2, 3),
+                searchable = FALSE)),
+            paging = TRUE,
+            searching = TRUE,
+            pageLength = 20)
+    )
+```
+
+## TDaP
+
+```{r fig.height=12, fig.width=18}
+ggplot(plot_df |>
+    filter(vaccine == "tdap"),
+aes(x = year,
+    y = estimate,
+    ymin = lower,
+    ymax = upper,
+    color = source,
+    group = source, fill = source)) +
+    geom_ribbon(color = NA, alpha = .2) +
+    geom_line() + facet_geo(~abbrev) +
+    theme_bw() +
+    scale_fill_brewer("Data source", palette = "Set1") +
+    scale_color_brewer("Data source", palette = "Set1") +
+    scale_y_continuous("TDaP vaccination rate at 35 months") +
+    scale_x_continuous(NULL)
+```
+
+```{r}
+print_df |>
+    filter(vaccine == "tdap") |>
+    select(-vaccine) |> 
+    DT::datatable(
+        colnames = c(
+            "Year",
+            "State",
+            "NIS Estimate",
+            "CDC Estimate"
+        ),
+        rownames = FALSE,
+        filter = list(
+            position = "top"
+        ),
+        options = list(
+            columnDefs = list(list(targets = c(2, 3),
+                searchable = FALSE)),
+            paging = TRUE,
+            searching = TRUE,
+            pageLength = 20)
+    )
+```
+
+## Polio
+
+```{r fig.height=12, fig.width=18}
+ggplot(plot_df |>
+    filter(vaccine == "polio"),
+aes(x = year,
+    y = estimate,
+    ymin = lower,
+    ymax = upper,
+    color = source,
+    group = source, fill = source)) +
+    geom_ribbon(color = NA, alpha = .2) +
+    geom_line() + facet_geo(~abbrev) +
+    theme_bw() +
+    scale_fill_brewer("Data source", palette = "Set1") +
+    scale_color_brewer("Data source", palette = "Set1") +
+    scale_y_continuous("Polio vaccination rate at 35 months") +
+    scale_x_continuous(NULL)
+```
+
+```{r}
+print_df |>
+    filter(vaccine == "polio") |>
+    select(-vaccine) |> 
+    DT::datatable(
+        colnames = c(
+            "Year",
+            "State",
+            "NIS Estimate",
+            "CDC Estimate"
+        ),
+        rownames = FALSE,
+        filter = list(
+            position = "top"
+        ),
+        options = list(
+            columnDefs = list(list(targets = c(2, 3),
+                searchable = FALSE)),
+            paging = TRUE,
+            searching = TRUE,
+            pageLength = 20)
+    )
+```

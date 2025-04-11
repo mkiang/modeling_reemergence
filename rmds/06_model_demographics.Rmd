@@ -1,0 +1,370 @@
+---
+title: "Demographic details"
+author: "Mathew Kiang"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+```{r data, results='hide'}
+## Imports ----
+library(tidyverse)
+library(duckdb)
+library(here)
+library(kableExtra)
+library(knitr)
+source(here("code", "utils.R"))
+
+contact_matrix <- utils::read.csv(here::here("data", "prem2021_v2.csv"), header = FALSE)
+```
+
+```{r}
+## Modified simulation function 
+simulate_outbreak <- function(R0,
+                              gamma,
+                              sigma,
+                              lambda_import,
+                              initial_immune,
+                              birth_rate,
+                              age_population,
+                              age_specific_mu_rate,
+                              contact_matrix_load,
+                              pathogen_x = "rubella",
+                              target_coverage = 0,
+                              vaccine_efficacy,
+                              transmission_reduction,
+                              static_importation = FALSE,
+                              import_by_population,
+                              days = 365 * 25) {
+    ## Constants
+    beta_start <- R0 * gamma
+    aging_fraction <- 1 / (5 * 12) # Monthly aging for compartments
+    age_bins <- seq(0, 85, 5)
+    N_AGES <- NROW(age_bins)
+    
+    female_df <- dplyr::tribble(
+    ~age_group, ~female, ~total,
+    15, 30958568, 63317757,
+    20, 32319438, 66360962,
+    25, 34743499, 71103584,
+    30, 33015027, 66966208,
+    35, 32289146, 64830919,
+    40, 29913869, 59610918
+) |>
+    dplyr::transmute(age_group,
+        prob_female = female / total
+    )
+
+    # Vaccination parameters
+    # NOTE: For polio and diphtheria, we assume 100% seroconversion
+    # so perfect vaccine efficacy at any given coverage, but each have
+    # reduced transmission due to vaccination
+    effective_coverage <- min(target_coverage, 1) * vaccine_efficacy
+
+    # Exponential movement rate for 5-year compartment with daily time step
+    # (only used when effective coverage > 0 and only for first age bin)
+    aging_rate <- 1 / (5 * 365)
+
+    ## Age params
+    age_distribution <- age_population / sum(age_population)
+    age_specific_mu <- 1 - exp(-age_specific_mu_rate)
+
+    # Calculate contact matrix
+    contact_matrix <- as.matrix(t(contact_matrix_load))
+    # Compute next generation matrix
+    G_trial <- beta_start / gamma * t(contact_matrix_load)
+    # Calculate dominant eigenvalue of the trial matrix
+    lambda_max_trial <- max(Re(eigen(G_trial)$values))
+    # Scale beta to match desired R0, to account for mixing matrix
+    beta <- beta_start * (R0 / lambda_max_trial)
+
+    # Initialize compartments for each age group
+    S <- as.integer((1 - initial_immune) * age_population)
+    E <- rep(0, N_AGES)
+    I <- rep(0, N_AGES)
+    R <- as.integer(initial_immune * age_population)
+
+    # Results storage containers
+    susceptible <- matrix(0, nrow = days, ncol = N_AGES)
+    exposed <- matrix(0, nrow = days, ncol = N_AGES)
+    infectious <- matrix(0, nrow = days, ncol = N_AGES)
+    recovered <- matrix(0, nrow = days, ncol = N_AGES)
+    new_infectious_store <- matrix(0, nrow = days, ncol = N_AGES)
+    vrt_store <- matrix(0, nrow = days, ncol = N_AGES)
+    imported_store <- matrix(0, nrow = days, ncol = N_AGES)
+    
+    ## The storage containers we actually want
+    births_store <- vector("numeric", length = days)
+    deaths_store <- vector("numeric", length = days)
+    population_store <- vector("numeric", length = days)
+    sus_repro_female_store <- vector("numeric", length = days)
+
+    # Note that we track vaccination reduced transmission for *all* outcomes
+    # but it only changes for polio and diphtheria. For other pathogens, it's
+    # always 0. Just makes reassembling the results easier since the output
+    # will be consistent.
+    VRT_number <- rep(0, N_AGES)
+    if (pathogen_x == "polio") {
+        # Since IPV roll out in 2000, all seropositive during this
+        # period is likely due to IPV vaccination (approx ages 1-25 years)
+        VRT_number[1:5] <- R[1:5]
+        S[1:5] <- S[1:5] + R[1:5] # Remove IPV protection against infection
+        R[1:5] <- R[1:5] - R[1:5] # Should be zero
+    }
+
+    if (pathogen_x == "diphtheria") {
+        VRT_number <- R
+        S <- S + R # Remove protection against infection
+        R <- R - R # Should be zero
+    }
+    
+    # Record susceptible fraction at time 0
+    susceptible_fraction_t0 <- sum(S) / sum(S + E + I + R)
+
+    # Simulation loop
+    for (t in seq.int(days)) {
+        # Store results
+        susceptible[t, ] <- S
+        exposed[t, ] <- E
+        infectious[t, ] <- I
+        recovered[t, ] <- R
+        vrt_store[t, ] <- VRT_number
+        
+        population_store[t] <- sum(S + E + I + R)
+        sus_repro_female_store[t] <- sum((S[4:9] - VRT_number[4:9]) * female_df$prob_female)
+
+        # frequency-dependent transmission (age-based mixing)
+        current_pop_size <- S + E + I + R
+        if (pathogen_x %in% c("polio", "diphtheria")) {
+            VRT_coverage <- VRT_number / current_pop_size
+            VRT_reduction_transmission <- transmission_reduction * VRT_coverage
+            force_of_infection <- beta * (contact_matrix %*% (I * (1 - VRT_reduction_transmission) / current_pop_size))
+        } else {
+            force_of_infection <- beta * (contact_matrix %*% (I / current_pop_size))
+        }
+
+        # Calculate transition probabilities for each age group (from rates)
+        p_SE <- 1 - exp(-force_of_infection) # S -> E
+        p_EI <- 1 - exp(-sigma) # E -> I
+        p_IR <- 1 - exp(-gamma) # I -> R
+
+        # Account for maternal protection factor (6 months of perfect immunity after birth)
+        # Based on 6 months, within a 5 year age bin
+        # (10% within this age group at protected by maternal immunity)
+        maternal_protection_factor <- 0.1
+        # Remove subset from S state to account for maternal protection
+        S_maternalimmunity <- S
+        S_maternalimmunity[1] <- round(S_maternalimmunity[1] *
+            (1 - maternal_protection_factor))
+
+        # Stochastic transitions for each age group
+        new_exposed <- stats::rbinom(N_AGES, S, p_SE)
+        new_infectious <- stats::rbinom(N_AGES, E, p_EI)
+        new_recovered <- stats::rbinom(N_AGES, I, p_IR)
+
+        # Importation process
+        if (static_importation) {
+            lambda_import_t <- lambda_import
+        } else {
+            susceptible_fraction_t <- sum(S) / sum(S + E + I + R)
+            importation_multiplier <- susceptible_fraction_t / susceptible_fraction_t0
+            lambda_import_t <- lambda_import * importation_multiplier
+        }
+        
+        prob_weights <- age_distribution
+        if (!import_by_population) {
+            prob_weights <- (S / (S + E + I + R)) * age_distribution
+        }
+
+        import_cases_dt <- stats::rpois(1, lambda_import_t)
+        imported_cases_age <- sample(
+            x = c(1:N_AGES),
+            size = import_cases_dt,
+            prob = prob_weights,
+            replace = TRUE
+        )
+        imported_cases <- tabulate(
+            factor(imported_cases_age, levels = 1:N_AGES),
+            nbins = N_AGES
+        )
+        imported_store[t, ] <- imported_cases
+
+        # Update compartments
+        S <- S - new_exposed
+        E <- E + new_exposed - new_infectious
+        I <- I + new_infectious - new_recovered + imported_cases
+        R <- R + new_recovered
+
+        # count incident cases (including imports)
+        new_infectious_store[t, ] <- new_infectious + imported_cases
+
+        # Apply age-specific death rates
+        total_deaths <- stats::rbinom(N_AGES, S + E + I + R, age_specific_mu)
+        if (sum(total_deaths) > 0) {
+            deaths_S <- round((S / (S + E + I + R)) * total_deaths)
+            deaths_E <- round((E / (S + E + I + R)) * total_deaths)
+            deaths_I <- round((I / (S + E + I + R)) * total_deaths)
+            deaths_R <- total_deaths - (deaths_S + deaths_E + deaths_I)
+            # Ensure all deaths are distributed
+
+            S <- S - deaths_S
+            E <- E - deaths_E
+            I <- I - deaths_I
+            R <- R - deaths_R
+        }
+        
+        deaths_store[t] <- sum(total_deaths)
+
+        # Apply births
+        if (pathogen_x %in% c("polio", "diphtheria")) {
+            births <- stats::rpois(1, sum(S + E + I + R) * birth_rate)
+            VRT_number[1] <- VRT_number[1] + round(births * effective_coverage)
+            S[1] <- round(S[1] + births)
+
+            ## Make sure VRT number doesn't exceed number of susceptibles
+            VRT_number <- pmin(VRT_number, S)
+        } else {
+            # Births added to the youngest age group
+            births <- stats::rpois(1, sum(S + E + I + R) * birth_rate)
+            S[1] <- round(S[1] + births * (1 - effective_coverage))
+            R[1] <- round(R[1] + births * effective_coverage)
+        }
+        
+        births_store[t] <- births
+
+        # Age population progression
+        # (individuals age by shifting compartments every month)
+        if (t %% 30 == 0) {
+            # Perform aging every month
+            S_next <- round(S * aging_fraction)
+            E_next <- round(E * aging_fraction)
+            I_next <- round(I * aging_fraction)
+            R_next <- round(R * aging_fraction)
+
+            # Removed aged individuals
+            S <- S - c(S_next[-length(S)], 0)
+            E <- E - c(E_next[-length(E)], 0)
+            I <- I - c(I_next[-length(I)], 0)
+            R <- R - c(R_next[-length(R)], 0)
+
+            # Add aged individuals to the next bin
+            S <- S + c(0, S_next[-length(S)])
+            E <- E + c(0, I_next[-length(E)])
+            I <- I + c(0, E_next[-length(I)])
+            R <- R + c(0, R_next[-length(R)])
+
+            # Add aging to the IPV vaccine tracker (number of IPV vaccinated persons per age group)
+            if (pathogen_x %in% c("polio", "diphtheria")) {
+                # Aging of vaccine coverage
+                VRT_next <- round(VRT_number * aging_fraction)
+                VRT_number <- VRT_number - c(VRT_next[-length(VRT_number)], 0)
+                VRT_number <- VRT_number + c(0, VRT_next[-length(VRT_number)])
+            }
+        }
+    }
+
+    ## Remove this here so cumsum() below calculates the right thing
+    rm(new_infectious)
+
+    # Create a data frame for plotting
+    results <- data.frame(
+        time = 1:days,
+        population = population_store,
+        births = births_store,
+        deaths = deaths_store,
+        female_repro_sus = sus_repro_female_store
+    ) 
+
+    results
+}
+
+```
+
+```{r}
+holder <- map_dfr(.x = c("DC", state.abb),
+    .f = ~ {
+        rubella_params <- return_pathogen_params(.x, pathogen_x = "rubella")
+
+        R0 <- rubella_params$R0
+        gamma <- rubella_params$gamma
+        sigma <- rubella_params$sigma
+        lambda_import <- rubella_params$lambda_import
+        initial_immune <- return_initial_immunity(.x, pathogen_x = "rubella")
+        birth_rate <- return_birth_rate(.x) / 365
+        age_population <- return_age_structure(.x)
+        age_specific_mu_rate <- return_death_rate(.x) / 365
+        contact_matrix_load <- contact_matrix
+        vaccine_efficacy <- rubella_params$vaccine_efficacy
+        transmission_reduction <- rubella_params$transmission_reduction
+        static_importation <- FALSE
+        import_by_population <- FALSE
+        days <- 365 * 25
+
+        simulate_outbreak(R0 = R0,
+            gamma = gamma,
+            sigma = sigma,
+            lambda_import = lambda_import,
+            initial_immune = initial_immune,
+            birth_rate = birth_rate,
+            age_population = age_population,
+            age_specific_mu_rate = age_specific_mu_rate,
+            contact_matrix_load = contact_matrix_load,
+            pathogen_x = "rubella",
+            target_coverage = 0,
+            vaccine_efficacy = vaccine_efficacy,
+            transmission_reduction = transmission_reduction,
+            static_importation = FALSE,
+            import_by_population = import_by_population,
+            days = 365 * 25) |>
+            mutate(state = .x)
+    })
+holder <- bind_rows(holder)
+us_df <- holder |> 
+    mutate(state = "US") |>
+    group_by(state, time) |> 
+    summarize(across(population:female_repro_sus, sum),
+              .groups = "drop")
+
+pop_t0 <- us_df |> 
+    filter(time == 1) |> 
+    pull(population) |> 
+    round() |> 
+    prettyNum(big.mark = ",")
+
+pop_tmax <- us_df |> 
+    filter(time == max(time)) |> 
+    pull(population) |> 
+    round() |> 
+    prettyNum(big.mark = ",")
+
+total_births <- us_df |> 
+    pull(births) |> 
+    sum() |> 
+    round() |> 
+    prettyNum(big.mark = ",")
+
+total_deaths <- us_df |> 
+    pull(deaths) |> 
+    sum() |> 
+    round() |> 
+    prettyNum(big.mark = ",")
+
+mean_repro_women <- us_df |> 
+    pull(female_repro_sus) |> 
+    mean()
+total_repro_women_pt <- round(mean_repro_women * 25) |> 
+    prettyNum(big.mark = ",")
+```
+
+
+To support interpretation of the model results, we include some demographic details about the simulated US population over 25 years. At the start of the simulation, the US population was estimated at `r pop_t0` people and at the end of the simulation was estimated at `r pop_tmax` people. Over the 25-year simulation, we estimate `r total_births` births, which relate to the number of children eligible for vaccination. We estimate `r total_repro_women_pt` person-years of women of reproductive age (15-44 years) who were susceptible to rubella infection in the absence of routine childhood vaccination.  

@@ -1,0 +1,111 @@
+---
+title: "Time to endemicity"
+author: "Mathew Kiang"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+```
+
+```{r data, results='hide'}
+## Imports ----
+library(tidyverse)
+library(here)
+library(knitr)
+library(DT)
+library(kableExtra)
+
+## Data ----
+summary_holder <- readRDS(here("data", "endemic_timing_summary.RDS")) |> 
+    filter(metric != "above1_time")
+```
+
+# Static tables 
+
+## Summary of endemic timing 
+```{r}
+summary_holder |>
+    filter(vaccine_coverage %in% c(1, .9, 1.05, .5, .75),
+           metric == "endemic_time") |> 
+    transmute(
+        metric_cat, 
+        pathogen_cat,
+        vaccine_coverage_cat,
+        n_sims,
+        n_reached_endemicity = n_finite,
+        prob_endemic = sprintf("%0.1f%%", round(n_finite / n_sims * 100, 1)),
+        endemic_year = sprintf(
+            "%0.1f (%0.1f-%0.1f)",
+            round(mean / 365, 1),
+            round(p025 / 365, 1),
+            round(p975 / 365, 1)
+        )
+    ) |> 
+    arrange(metric_cat, pathogen_cat, vaccine_coverage_cat) |>
+    kable(format = "html") |>
+    kable_styling("striped", full_width = TRUE) 
+```
+
+# Interactive table, full results
+
+```{r}
+summary_holder |>
+    transmute(
+        metric_cat,
+        pathogen_cat,
+        vaccine_coverage_cat,
+        n_sims,
+        n_reached_endemicity = n_finite,
+        prob_endemic = sprintf("%0.1f%%", round(n_finite / n_sims * 100, 1)),
+        endemic_year = sprintf(
+            "%0.1f (%0.1f-%0.1f)",
+            round(mean / 365, 1),
+            round(p025 / 365, 1),
+            round(p975 / 365, 1)
+        )
+    ) |>
+    arrange(metric_cat, pathogen_cat, desc(vaccine_coverage_cat)) |>
+    DT::datatable(
+        colnames = c(
+            "Endemicity definition",
+            "Pathogen",
+            "Vaccine coverage", 
+            "Simulations (n)",
+            "Simulations reaching endemicity (n)",
+            "Probability of endemicity (%)",
+            "Endemic timing"
+        ),
+        rownames = FALSE,
+        filter = list(
+            position = "top"
+        ),
+        options = list(
+            # columnDefs = list(
+            #     list(targets = c(1), searchable = FALSE)
+            #     ),
+            paging = TRUE,
+            searching = TRUE,
+            pageLength = 100,
+            searchCols = list(
+                # list(search = '"[Primary definition"]'),
+                NULL,
+                NULL, 
+                list(search = '["5% higher","Current levels","10% lower","20% lower","50% lower"]'),
+                NULL,
+                NULL,
+                NULL,
+                NULL
+            )
+        )
+    )
+```
+
