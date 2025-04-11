@@ -1,0 +1,41 @@
+"Notes"	"Age Group"	"Age Group Code"	"Sex"	"Sex Code"	Projected Populations
+	"15-19 years"	"15-19"	"Female"	"F"	30958568
+	"15-19 years"	"15-19"	"Male"	"M"	32359189
+"Total"	"15-19 years"	"15-19"			63317757
+	"20-24 years"	"20-24"	"Female"	"F"	32319438
+	"20-24 years"	"20-24"	"Male"	"M"	34041524
+"Total"	"20-24 years"	"20-24"			66360962
+	"25-29 years"	"25-29"	"Female"	"F"	34743499
+	"25-29 years"	"25-29"	"Male"	"M"	36360085
+"Total"	"25-29 years"	"25-29"			71103584
+	"30-34 years"	"30-34"	"Female"	"F"	33015027
+	"30-34 years"	"30-34"	"Male"	"M"	33951181
+"Total"	"30-34 years"	"30-34"			66966208
+	"35-39 years"	"35-39"	"Female"	"F"	32289146
+	"35-39 years"	"35-39"	"Male"	"M"	32541773
+"Total"	"35-39 years"	"35-39"			64830919
+	"40-44 years"	"40-44"	"Female"	"F"	29913869
+	"40-44 years"	"40-44"	"Male"	"M"	29697049
+"Total"	"40-44 years"	"40-44"			59610918
+"Total"					392190348
+"---"
+"Dataset: National Population Projections 2014-2060"
+"Query Parameters:"
+"Age Group: 15-19 years; 20-24 years; 25-29 years; 30-34 years; 35-39 years; 40-44 years"
+"Year: 2017; 2018; 2019"
+"Group By: Age Group; Sex"
+"Show Totals: True"
+"Show Zero Values: False"
+"---"
+"Help: See http://wonder.cdc.gov/wonder/help/PopulationProjections-2060.html for more information."
+"---"
+"Query Date: Feb 7, 2025 7:32:01 PM"
+"---"
+"Suggested Citation: National Population Projections: United States by Age, Sex, Ethnicity and Race for years 2014-2060, released"
+"by the U.S. Census Bureau on December 10, 2014, on CDC WONDER Online Database, 2015. Accessed at"
+"http://wonder.cdc.gov/population-projections-2014-2060.html on Feb 7, 2025 7:32:01 PM"
+"---"
+Caveats:
+"1. Population estimates and projections are updated periodically, population estimates and projections produced in the preceding"
+"years are superseded by the most recent population series for the same years. Population estimates are preferred to projections"
+"when estimates are available, unless the objective is to compare numbers with others in the projected series."
