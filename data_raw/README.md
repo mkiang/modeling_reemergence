@@ -23,7 +23,7 @@
 
 - About `NISPUF22.R`. **This file, as downloaded, will not run.** Specifically, Lines 158 and 165 contain vectors with empty arguments. To make this file run, I modified both lines by inserting an `NA` into the first argument of the vector. This matches the command from all other scripts. 
 - About `nispuf07.r`. **This file, as downloaded, will not run on MacOS.** There is an "incomplete final line" error on the original file. I modified the final by deleting two extra final lines at the end and creating a newline manually. 
-- The files for 2004, 2005, 2006, and 2007 are all compressed. I uncompressed the files but otherwise did not modify them. 
-- There is no ingestion script for 2004, 2005, 2006, or 2015. 
+- The files for 2004, 2005, 2006, and 2007 are all compressed. I decompressed the files but otherwise did not modify them. 
+- There is no ingestion script for 2004, 2005, 2006, or 2015. I ingest the minimally necessary set of columns necessary for our estimates. 
   - The [2015 link leads to a dead URL](https://www.cdc.gov/vaccines/imz-managers/nis/downloads/nis-puf15.r).
   - No links are provided for 2004-2006.
