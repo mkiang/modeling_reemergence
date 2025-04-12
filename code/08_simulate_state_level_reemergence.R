@@ -2,10 +2,10 @@
 ##
 ## This file runs the primary simulation (see ./code/utils_simulation.R for the
 ## actual model code) for each state, pathogen, and vaccine coverage scenario.
-## Each simulation is run in batches of 100 and repeated 10 times for a total
-## of 1000 simulations per state/pathogen/vaccine scenario. The entire
+## Each simulation is run in batches of 100 and repeated 20 times for a total
+## of 2000 simulations per state/pathogen/vaccine scenario. The entire
 ## simulation is saved as a parquet file and can be queried on disk using
-## duckdb. As a result, this takes a large amount of disk space (~870 GB).
+## duckdb. As a result, this takes a large amount of disk space (~550 GB).
 
 ## Imports ----
 library(tidyverse)

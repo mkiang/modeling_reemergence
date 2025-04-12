@@ -1,7 +1,7 @@
 ## 09_extract_state_persontime.R ----
 ##
 ## Some results need to be normalized by the person-time in each state. This
-## file extracts the person time from 1000 simulations to get the average
+## file extracts the person time from 2000 simulations to get the average
 ## (and distribution) of person time for each state.
 
 ## Imports ----

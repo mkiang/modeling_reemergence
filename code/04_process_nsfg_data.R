@@ -78,7 +78,7 @@ saveRDS(
     here::here("data", "probability_of_pregnancy.RDS")
 )
 
-## Verify we have the right survey weights and nesting correct by comparing
+## Verify we have the right survey weights and are nesting correct by comparing
 ## these results to the official documentation found at:
 ## https://www.cdc.gov/nchs/data/nsfg/NSFG-2017-2019-VarEst-Ex1-508.pdf
 

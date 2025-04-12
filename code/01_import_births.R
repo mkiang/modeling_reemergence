@@ -1,7 +1,7 @@
 ## 01_import_births.R ----
 ##
 ## Takes the natality files from NCHS and cleans them up into the number of
-## births per 1,000 population by state, year, and age group.
+## births by state, year, and age group.
 
 ## Imports ----
 library(tidyverse)

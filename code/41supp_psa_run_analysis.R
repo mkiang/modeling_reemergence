@@ -29,14 +29,14 @@ source(here::here("code", "49supp_utils_probabilistic_sensitivity_analysis.R"))
 ## CONSTANTS ----
 ## NOTE: On Stanford cluster, detectCores() doesn't return proper number of
 ## cores so you'll need to manually set this to 1 less than requested from
-## the sbatch file (default is 18 cores, which results in 90% utilization).
+## the sbatch file (default is 17 cores, which results in 90% utilization).
 PARAM_IX <- as.integer(args[1])
 # N_CORES <- ifelse(is.na(PARAM_IX), 20, parallel::detectCores() - 1)
 N_CORES <- ifelse(is.na(PARAM_IX), 20, 17)
 VERBOSE <- TRUE
 
 ## Data ----
-# 18x18 (POLYMOD, revised to US estimates; Prem et al, PLOS Comp Bio 2017)
+# 18x18 (POLYMOD, revised to US estimates; Prem et al, PLOS Comp Bio 2021)
 contact_matrix <- utils::read.csv(here::here("data", "prem2021_v2.csv"), header = FALSE)
 lhs_samples <- readRDS(here::here("data", "lhs_untransformed.RDS"))
 
@@ -76,7 +76,8 @@ row_grid <- analytic_immunity |>
 batch_grid <- row_grid |>
     dplyr::select(pathogen, coverage, batch, f_path) |>
     dplyr::distinct() |>
-    dplyr::mutate(priority = dplyr::case_when(coverage %in% c(1, .5, .75, .9, 1.05) ~ 1,
+    dplyr::mutate(priority = dplyr::case_when(
+        coverage %in% c(1, .5, .75, .9, 1.05) ~ 1,
         coverage %in% c(-.95, 0, .95, .7, 1.1) ~ 2,
         TRUE ~ 3)) |>
     dplyr::arrange(priority, coverage, pathogen, batch) |>

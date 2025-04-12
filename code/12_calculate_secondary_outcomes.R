@@ -38,7 +38,7 @@ female_df <- dplyr::tribble(
 
 ### Probability of being in first two trimesters of pregnancy ----
 ### Conditional on being female and age group. Note that no observed
-### prgnancies in the NSFG 2017-2019 45+ age group so I drop it here.
+### pregnancies in the NSFG 2017-2019 45+ age group so I drop it here.
 preg_df <- readRDS(here::here("data", "probability_of_pregnancy.RDS")) |>
     dplyr::select(age_group = age_bin,
         prob_preg_tri2 = preg_first_two_tri,

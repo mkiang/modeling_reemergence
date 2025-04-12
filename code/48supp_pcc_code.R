@@ -1,7 +1,7 @@
 ## NOTE: This code was taken from the {sensitivity} package in R written by
 ## Gilles Pujol and Bertrand Iooss. The full package has too many dependencies
 ## that does not reliably install across my machines. This is the only function
-## we use from the package so I copy it here to minimize errors.
+## we use from the package so I copy it here to minimize compilation errors.
 ##
 ## Source: https://github.com/cran/sensitivity/blob/master/R/pcc.R
 library(boot)

@@ -1,7 +1,7 @@
 ## 11_summarize_simulations.R ----
 ##
 ## Once we have all state-level simulations and a corresponding set of national
-## simulations, this script reads them in using duckdb and summarized them by
+## simulations, this script reads them in using duckdb and summarizes them by
 ## geogeraphy/pathogen/time/vaccine coverage. The results are saved in
 ## pathogen-specific parquet files, which are later queried using duckdb.
 

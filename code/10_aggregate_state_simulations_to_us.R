@@ -4,7 +4,7 @@
 ## each state. Note that this script (basically) generates a US set of
 ## simulations by taking each individual simulation across all states and
 ## aggregating up. So Batch 1, Simulation 1 is opened for each state, summed
-## up, and then saved as Batch 1, Simulation 1 for the US. Resulting in 1,000
+## up, and then saved as Batch 1, Simulation 1 for the US. Resulting in 2,000
 ## US-level simulations.
 
 ## Imports ----

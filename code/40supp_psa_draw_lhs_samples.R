@@ -20,7 +20,8 @@ source(here::here("code", "utils.R"))
 ## addition to two values for R0 and lambda_import for a total of 20 values
 ## (columns) and 1000 LHS samples (rows).
 ##
-## In addition, for polio, we will vary the IPV reduction factor.
+## In addition, for polio and diphtheria, we will vary the vaccination 
+## reduction factor.
 ##
 ## NOTE: We set a seed to ensure reproducibility, but the seed doesn't ensure
 ## the same random samples across different OS'es (or R versions or even
@@ -67,6 +68,9 @@ if (!fs::file_exists(here::here("data", "latin_hypercube_samples.RDS"))) {
 }
 
 ## Convert LHS into transformed values for whole US ----
+## To allow for clearer interpretation of the PCC, we transform the state-
+## specific LHS samples into population weighted averages (again only for
+## the parameters that vary by state). 
 if (!fs::file_exists(here::here("data", "lhs_transformed.RDS"))) {
     transformed_lhs <- lhs_samples |>
         dplyr::mutate(draw_type = "transformed")
@@ -112,7 +116,7 @@ if (!fs::file_exists(here::here("data", "lhs_transformed.RDS"))) {
         new_initial_immunity <- pmin(new_initial_immunity, 1)
         transformed_lhs[i, age_start:age_end] <- as.list(new_initial_immunity)
 
-        ## Get new IPV reduction factor
+        ## Get new vaccine reduction factor
         if (pathogen_x %in% c("polio", "diphtheria")) {
             new_transmission_reduction <- stats::qnorm(
                 p = transmission_reduction_x,
