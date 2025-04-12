@@ -108,15 +108,6 @@ ggplot2::ggsave(
     scale = 1,
     dpi = 1200
 )
-## Make a low res version for the github:
-ggplot2::ggsave(
-    here::here("plots", "fig1_cumulative_infections_lowres.jpg"),
-    p1,
-    width = 8,
-    height = 8,
-    scale = 1,
-    dpi = 300
-)
 readr::write_csv(
     us_final |>
         dplyr::select(

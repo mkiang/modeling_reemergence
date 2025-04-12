@@ -132,6 +132,9 @@ p_map <- plot_map(temp_df) +
 map_measles <- p_map + p_inset + patchwork::plot_layout(design = fig_layout)
 map_measles
 
+map_measles_notitle <- plot_map(temp_df) + 
+    p_inset + patchwork::plot_layout(design = fig_layout)
+
 ## Rubella at 25% reduction ----
 temp_df <- discretize_rate(summary_df, 
                            "rubella", 
@@ -214,6 +217,14 @@ ggplot2::ggsave(
     height = 5.75,
     scale = .7,
     dpi = 1200
+)
+ggplot2::ggsave(
+    here::here("plots", "github_header_image.jpg"),
+    map_measles_notitle,
+    width = 11,
+    height = 5.75,
+    scale = .7,
+    dpi = 600
 )
 ggplot2::ggsave(
     here::here("plots", "fig4b_map_rubella_25percent.pdf"),
