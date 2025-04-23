@@ -9,74 +9,86 @@
 
 ## Introduction
 
-Reproducible code for our paper, “Modeling reemergence of
-vaccine-eliminated infectious diseases under declining vaccination in
-the United States”, which uses publicly-available data to simulate the
-impact of changes in routine childhood vaccination on the re-emergence
-of measles, rubella, diphtheria, and polio in the US.
+Data and reproducible code for our *JAMA* paper, “[Modeling reemergence
+of vaccine-eliminated infectious diseases under declining vaccination in
+the
+US](https://jamanetwork.com/journals/jama/fullarticle/10.1001/jama.2025.6495)”,
+which uses publicly-available data to simulate the impact of changes in
+routine childhood vaccination on the reemergence of measles, rubella,
+diphtheria, and polio in the United States.
+
+The full citation is:
+
+> Kiang MV, Bubar KM, Maldonado Y, Hotez PJ, Lo NC. Modeling reemergence
+> of vaccine-eliminated infectious diseases under declining vaccination
+> in the US. *JAMA.* 2025 Apr 24. doi:
+> [10.1001/jama.2025.6495](https://jamanetwork.com/journals/jama/fullarticle/10.1001/jama.2025.6495)
 
 ### Abstract
 
 **Importance**: Widespread childhood vaccination has eliminated many
-infectious diseases in the United States. However, vaccination rates are
-declining and there are ongoing policy debates to reduce the childhood
-vaccine schedule, which may risk re-emergence of previously eliminated
-infectious diseases.
+infectious diseases in the US. However, vaccination rates are declining,
+and there are ongoing policy debates to reduce the childhood vaccine
+schedule, which may risk reemergence of previously eliminated infectious
+diseases.
 
 **Objective**: To estimate the number of cases and complications in the
-United States under scenarios of declining childhood vaccination for
-measles, rubella, poliomyelitis, and diphtheria.
+US under scenarios of declining childhood vaccination for measles,
+rubella, poliomyelitis, and diphtheria.
 
-**Design, Setting, and Participants**: We used a simulation model that
-simulates importation and dynamic spread of vaccine-preventable
-infectious diseases in the US population across 50 states and the
-District of Columbia. The model was parameterized with data on
-area-specific estimates for demography, population immunity, and
-infectious disease importation risk. We estimated the impact of
-declining vaccination under different scenarios over a 25-year period.
-Baseline inputs for childhood vaccination rates were based on data from
-2004 – 2023.
+**Design, Setting, and Participants**: A simulation model was used to
+assess the importation and dynamic spread of vaccine-preventable
+infectious diseases across 50 US states and the District of Columbia.
+The model was parameterized with data on area-specific estimates for
+demography, population immunity, and infectious disease importation
+risk. The model evaluated scenarios with different vaccination rates
+over a 25-year period. Inputs for current childhood vaccination rates
+were based on 2004-2023 data.
 
-**Main Outcomes and Measures**: Cumulative cases of measles, rubella,
-poliomyelitis, and diphtheria in the United States. Secondary outcomes
-included infection-related complications (post-measles neurological
-sequelae, congenital rubella syndrome, paralytic poliomyelitis,
-hospitalization, and death) and the probability and timing for an
-infection to re-establish endemicity.
+**Main Outcomes and Measures**: The primary outcomes were estimated
+cases of measles, rubella, poliomyelitis, and diphtheria in the US. The
+secondary outcomes were estimated rates of infection-related
+complications (postmeasles neurological sequelae, congenital rubella
+syndrome, paralytic poliomyelitis, hospitalization, and death) and the
+probability and timing for an infection to reestablish endemicity.
 
 **Results**: At current state-level vaccination rates, the simulation
-model predicts measles may re-establish endemicity (83% of simulations;
-mean time of 20.9 years) with an estimated 851,300 cases (95%
-uncertainty interval (UI): 381,300 – 1.3M) over 25 years. Under a
-scenario with a 10% decline in MMR vaccination, the model estimates 11.1
-million measles cases (10.1M – 12.1M) over 25 years, while a 5% increase
-in MMR vaccination reduces cases to 5,800 (3,100 – 19,400). Other
-vaccine-preventable diseases are unlikely to re-establish endemicity
-under current levels of vaccination. If routine childhood vaccination
-declined by 50%, the model predicts 51.2 million measles cases (49.7M –
-52.5M), 9.9 million rubella cases (6.4M – 13.0M), 4.3 million
-poliomyelitis cases (4.0 – 21.5M), and 197 diphtheria cases (1 – 1,000)
-over a 25-year period. Under this scenario, we project 51,200 children
-with post-measles neurological sequelae (49,600 – 52,600), 10,700
-congenital rubella syndrome cases (6,700 – 14,600), 5,400 paralytic
-poliomyelitis cases (0 – 26,300), 10.3 million hospitalizations (9.9M –
-10.5M), and 159,200 deaths (151,200 – 164,700). In this scenario,
-measles became endemic at 4.9 years (4.3 – 5.6) and rubella became
-endemic at 18.1 years (17.0 – 19.6), while poliovirus returned to
-endemic levels in about half of simulations (56%) and took over 19 years
-to reach endemicity. There was large variation across states.
+model predicts measles may reestablish endemicity (83% of simulations;
+mean time of 20.9 years) with an estimated 851 300 cases (95%
+uncertainty interval \[UI\], 381 300 to 1.3 million cases) over 25
+years. Under a scenario with a 10% decline in measles-mumps-rubella
+(MMR) vaccination, the model estimates 11.1 million (95% UI, 10.1-12.1
+million) cases of measles over 25 years, whereas the model estimates
+only 5800 cases (95% UI, 3100-19 400 cases) with a 5% increase in MMR
+vaccination. Other vaccine-preventable diseases are unlikely to
+reestablish endemicity under current levels of vaccination. If routine
+childhood vaccination declined by 50%, the model predicts 51.2 million
+(95% UI, 49.7-52.5 million) cases of measles over a 25-year period, 9.9
+million (95% UI, 6.4-13.0 million) cases of rubella, 4.3 million cases
+(95% UI, 4 cases to 21.5 million cases) of poliomyelitis, and 197 cases
+(95% UI, 1-1000 cases) of diphtheria. Under this scenario, the model
+predicts 51 200 cases (95% UI, 49 600-52 600 cases) with postmeasles
+neurological sequelae, 10 700 cases (95% UI, 6700-14 600 cases) of
+congenital rubella syndrome, 5400 cases (95% UI, 0-26 300 cases) of
+paralytic poliomyelitis, 10.3 million hospitalizations (95% UI, 9.9-10.5
+million hospitalizations), and 159 200 deaths (95% UI, 151 200-164 700
+deaths). In this scenario, measles became endemic at 4.9 years (95% UI,
+4.3-5.6 years) and rubella became endemic at 18.1 years (95% UI,
+17.0-19.6 years), whereas poliovirus returned to endemic levels in about
+half of simulations (56%) at an estimated 19.6 years (95% UI, 14.0-24.7
+years). There was large variation across the US population.
 
 **Conclusions and Relevance**: Based on estimates from this modeling
 study, declining childhood vaccination rates will increase the frequency
 and size of outbreaks of previously eliminated vaccine-preventable
 infections, eventually leading to their return to endemic levels. The
-timing and critical threshold for returning to endemicity will differ by
-disease, with measles likely to be the first to return to endemic levels
-and may occur even under current vaccination levels without improved
-vaccine coverage and public health response. These findings support the
-need to continue routine childhood vaccination at high coverage to
-prevent resurgence of vaccine-preventable infectious diseases in the
-United States.
+timing and critical threshold for returning to endemicity will differ
+substantially by disease, with measles likely to be the first to return
+to endemic levels and may occur even under current vaccination levels
+without improved vaccine coverage and public health response. These
+findings support the need to continue routine childhood vaccination at
+high coverage to prevent resurgence of vaccine-preventable infectious
+diseases in the US.
 
 ### Issues
 
@@ -236,15 +248,34 @@ submit the manuscript for publication.
 
 ### Competing interests
 
-NCL reports consulting fees from the World Health Organization related
-to guidelines on neglected tropical diseases, which are outside the
-scope of the present work. Dr. Maldonado reports grants from Pfizer
-research and other from Pfizer member, DSMB outside the submitted work.
-MVK receives funding from the National Institutes of Health for work
-outside the scope of this paper. The remaining authors have no
-disclosures.
+Dr Kiang reported receiving grants from the National Institutes of
+Health for unrelated work. Dr Maldonado reported receiving grants from
+and serving on data and safety monitor boards for Pfizer. Dr Hotez
+reported being a coinventor on non–revenue-generating patents for
+neglected tropical diseases, which are owned by Baylor College of
+Medicine; reported being a coinventor of a COVID-19 recombinant protein
+vaccine technology owned by Baylor College of Medicine that was licensed
+by Baylor Ventures nonexclusively and without patent restrictions to
+several companies committed to advancing vaccine technology for low- and
+middle-income countries; reported not having involvement in the patent
+license negotiations, but may eventually receive a share of any royalty
+income resulting from a commercial license; and receiving royalty income
+from several books published by ASM-Wiley and Johns Hopkins University
+Press. Dr Lo reported receiving personal fees from the World Health
+Organization for unrelated work. No other disclosures were reported.
 
 ## Reproducibility
+
+All code and data necessary to reproduce the results in the paper are
+included in this repository. In addition, we provide [a link to our
+actual simulation files (and simulation summary
+files)](https://purl.stanford.edu/vd875bs1107) hosted on Stanford Data
+Repository.
+
+The code in this repository may change over time in response to feedback
+and comments; however, the state of the code at the time of
+submission/publication is available in the [`at-submission`
+release](https://github.com/mkiang/modeling_reemergence/releases/tag/at-submission).
 
 ### Computational requirements
 
@@ -301,7 +332,7 @@ requested time as appropriate for your compute environment.)
 All other files were run locally and are not set up to be run in an HPC
 environment.
 
-### Downloading the files
+### Downloading simulation files
 
 Due to Github storage/file size limitations, simulation files (and
 summaries files) are available on our [Stanford Data
@@ -316,6 +347,9 @@ Repository](https://purl.stanford.edu/vd875bs1107).
 - Similarly, `summaries.zip` and `supp_analyses.zip` need to be
   decompressed into the project root into folders called `./summaries/`
   and `./supp_analyses/`, respectively.
+
+Again, we note that you can reproduce the results in our paper without
+downloading our simulation files (by rerunning all the code).
 
 ### Package management
 
