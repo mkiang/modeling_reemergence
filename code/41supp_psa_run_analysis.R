@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 args <- commandArgs(trailingOnly = TRUE)
-# Rscript 51supp_psa_run_analysis.R <batch_grid row index>
+# Rscript 41supp_psa_run_analysis.R <batch_grid row index>
 
 ## WARNING: This takes a very long time. You should only run this if you
 ## really need to. This script, as written, will run >320 million simulations.
