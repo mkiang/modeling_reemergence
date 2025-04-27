@@ -69,17 +69,18 @@ row_grid <- analytic_immunity |>
             batch
         )
     )) |>
-    dplyr::arrange(batch, f_path) |>
-    dplyr::filter(pathogen %in% c("polio", "diphtheria"))
+    dplyr::arrange(batch, f_path)
 
-## Separating out to 20 LHS samples per file (50 files per scenario)
+## Prioritize the main vaccine scenarios first, so initial results are finished
+## before secondary results.
 batch_grid <- row_grid |>
     dplyr::select(pathogen, coverage, batch, f_path) |>
     dplyr::distinct() |>
     dplyr::mutate(priority = dplyr::case_when(
         coverage %in% c(1, .5, .75, .9, 1.05) ~ 1,
         coverage %in% c(-.95, 0, .95, .7, 1.1) ~ 2,
-        TRUE ~ 3)) |>
+        TRUE ~ 3
+    )) |>
     dplyr::arrange(priority, coverage, pathogen, batch) |>
     dplyr::select(-priority)
 
