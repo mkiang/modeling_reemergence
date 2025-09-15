@@ -17,6 +17,10 @@ rmds/old/**
 temp_endemic_timing/**
 temp_secondary_outcomes/**
 simulations_zipped/**
+code/999*
+code/Untilted*
+policy/**
+
 
 # General OS
 .DS_Store
@@ -133,4 +137,3 @@ $RECYCLE.BIN/
 *.lnk
 Icon
 Icon
-code/Untitled.R

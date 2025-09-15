@@ -539,7 +539,7 @@ pull_raw_simulations <- function(pathogen_x,
             dplyr::collect()
     }
 
-    duckdb::dbDisconnect(con)
+    x <- duckdb::dbDisconnect(con)
 
     res
 }
@@ -563,7 +563,7 @@ pull_summary_data <- function(state_x = NULL,
 
     if (!is.null(state_x)) {
         res <- res |>
-            dplyr::filter(state %in% "US")
+            dplyr::filter(state %in% state_x)
     }
 
     if (!is.null(vaccine_x)) {
